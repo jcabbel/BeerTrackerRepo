@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/amarillo_suave">
+
+
+    <TextView
+        android:id="@+id/textViewCampo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar por:" />
+
+    <!-- Menú desplegable para el nombre -->
+    <Spinner
+        android:id="@+id/spinnerCampo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:dropDownItemStyle="@style/SpinnerDropDownItem"/>
+
+    <TextView
+        android:id="@+id/textViewValor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Valor:" />
+
+    <!-- Menú desplegable para la marca -->
+    <Spinner
+        android:id="@+id/spinnerValor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:padding="8dp"
+        android:dropDownItemStyle="@style/SpinnerDropDownItem"/>
+
+
+    <!-- Botón para buscar -->
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Botón para cancelar búsqueda -->
+    <Button
+        android:id="@+id/btnCancelar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancelar Búsqueda"
+        android:layout_marginBottom="16dp" />
+
+</LinearLayout>
