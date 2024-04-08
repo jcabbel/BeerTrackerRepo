@@ -9,6 +9,23 @@ public class Cerveza {
     private double precio;
     private double graduacion;
 
+    public Cerveza(){
+    }
+
+    public Cerveza(int id) {
+        this.id = id;
+    }
+
+    public Cerveza(int id, String nombre, String pais, String tipo, String marca, double precio, double graduacion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.pais = pais;
+        this.tipo = tipo;
+        this.marca = marca;
+        this.precio = precio;
+        this.graduacion = graduacion;
+    }
+
     public int getId() {
         return id;
     }
