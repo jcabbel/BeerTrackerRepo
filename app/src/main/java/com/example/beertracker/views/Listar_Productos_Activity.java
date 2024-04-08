@@ -7,7 +7,7 @@ import android.widget.ListView;
 
 import com.example.beertracker.R;
 import com.example.beertracker.controllers.DbCervezas;
-import com.example.beertracker.controllers.Listar_Productos_Adapter;
+import com.example.beertracker.adapters.Listar_Productos_Adapter;
 import com.example.beertracker.models.Cerveza;
 
 import java.util.ArrayList;

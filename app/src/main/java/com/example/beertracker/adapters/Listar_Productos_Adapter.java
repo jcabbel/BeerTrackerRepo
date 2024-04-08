@@ -1,4 +1,4 @@
-package com.example.beertracker.controllers;
+package com.example.beertracker.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -56,7 +56,9 @@ public class Cerveza {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
     public double getGraduacion(){return graduacion;}
+
     public void setGraduacion(double graduacion){
         this.graduacion = graduacion;
     }

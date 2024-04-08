@@ -3,6 +3,7 @@ package com.example.beertracker.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Button;
@@ -10,15 +11,25 @@ import android.view.View.OnClickListener;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.beertracker.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Login_Activity extends AppCompatActivity {
+
+    TextView textViewRegister;
+    TextView textViewForgotPassword;
+    EditText editTextEmail;
+    EditText editTextPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView textViewRegister = findViewById(R.id.textViewRegister);
+        textViewRegister = findViewById(R.id.textViewRegister);
+        textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+
         textViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -28,7 +39,6 @@ public class Login_Activity extends AppCompatActivity {
             }
         });
 
-        TextView textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,20 +48,32 @@ public class Login_Activity extends AppCompatActivity {
             }
         });
 
-        // Simplemente mostramos un toast y avanzamos a la actividad del menú principal al hacer clic en Iniciar Sesión
         Button btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Mostrar un toast indicando inicio de sesión exitoso
-                Toast.makeText(Login_Activity.this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
+                String email = editTextEmail.getText().toString();
+                String password = editTextPassword.getText().toString();
 
-                // Crear un Intent para abrir la actividad del menú principal
-                Intent intent = new Intent(Login_Activity.this, Main_Menu_Activity.class);
-
-                // Iniciar la nueva actividad
-                startActivity(intent);
+                validarUsuario(email, password);
             }
         });
+    }
+
+    public void validarUsuario(String email, String password){
+
+        if(!email.isEmpty() && !password.isEmpty()){
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Intent intent = new Intent(Login_Activity.this, Main_Menu_Activity.class);
+                    intent.putExtra("email", email);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(Login_Activity.this, "Error al validar usuario", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(Login_Activity.this, "Los campos no pueden estar en blanco", Toast.LENGTH_SHORT).show();
+        }
     }
 }

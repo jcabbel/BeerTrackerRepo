@@ -42,7 +42,6 @@ public class DbCervezas extends DbHelper {
             values.put("marca", marca);
             values.put("precio", precio);
             values.put("graduacion", graduacion);
-
             id = db.insert(TABLE_CERVEZAS, null, values);
 
         } catch (Exception ex) {

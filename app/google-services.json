@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "959158805242",
+    "project_id": "beertracker-7e7c9",
+    "storage_bucket": "beertracker-7e7c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959158805242:android:b620f55ad3bdf6662f5f43",
+        "android_client_info": {
+          "package_name": "com.example.beertracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp-wtMjhc7U0ZxYH_Vo19lev1VVa518VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
