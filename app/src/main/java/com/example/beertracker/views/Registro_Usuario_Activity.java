@@ -97,12 +97,12 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
         String password = editTextPasswordRegister.getText().toString().trim();
         String nombre = editTextName.getText().toString();
         String apellidos = editTextLastName.getText().toString();
+        generoSeleccionado = seleccionarGenero();
 
 
         if (validarMail(email) && !password.isEmpty()){
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if(task.isSuccessful()){
-                    int genero = seleccionarGenero();
                     Usuario usuario = new Usuario (email, nombre, apellidos, generoSeleccionado, fechaSeleccionada);
                     db.collection("users").document(email).set(usuario);
                     Intent intent = new Intent(Registro_Usuario_Activity.this, Login_Activity.class);
@@ -124,13 +124,14 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
     }
 
     public int seleccionarGenero(){
-        radioGroupGender.setOnCheckedChangeListener((group, checkedId) -> {
+        int checkedId = radioGroupGender.getCheckedRadioButtonId();
             if (checkedId == R.id.radioButtonMale) {
-                generoSeleccionado = 0;
-            } else {
                 generoSeleccionado = 1;
-            }
-        });
+            } else if (checkedId == R.id.radioButtonFemale){
+                generoSeleccionado = 2;
+            } else {
+                generoSeleccionado = 0;
+            };
         return generoSeleccionado;
     }
 }
