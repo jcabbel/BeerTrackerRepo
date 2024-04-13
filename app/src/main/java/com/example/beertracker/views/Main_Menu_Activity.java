@@ -51,9 +51,11 @@ public class Main_Menu_Activity extends AppCompatActivity {
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Mostrar un Toast indicando que la función está disponible en próximas versiones
-                Toast.makeText(Main_Menu_Activity.this, "Función disponible en próximas versiones", Toast.LENGTH_SHORT).show();
+                // Iniciar la actividad de perfil
+                Intent intent = new Intent(Main_Menu_Activity.this, Perfil_Activity.class);
+                startActivity(intent);
             }
         });
+
     }
 }
