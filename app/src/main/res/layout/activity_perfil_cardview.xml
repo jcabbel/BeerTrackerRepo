@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/amarillo_suave">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="53dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="4dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.002"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/volver"
+        app:title="Perfil en BEERTRACKER"
+        app:titleTextColor="@android:color/white" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/fotoperfileric"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/textViewWelcome"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido, Usuario"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewInformacionPersonal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewWelcome">
+
+        <!-- Contenido del CardView para Información Personal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewTituloInformacionPersonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Información Personal"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewDetalleInformacionPersonal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nombre: Eric Escuder\nEdad: 26\nCorreo: eresber15@gmail.com"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView para Mis Cervezas -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewMisCervezas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardViewInformacionPersonal">
+
+        <!-- Contenido del CardView para Mis Cervezas -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewMisCervezas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mis Cervezas"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewDetalleMisCervezas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registros: 4\nTipos: 3\nFavoritos: 1"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+        <!-- Aquí puedes personalizar el diseño para las cervezas -->
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView para Experiencias -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewExperiencias"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardViewMisCervezas">
+
+        <!-- Contenido del CardView para Experiencias -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textViewExperiencias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mis Cervezas"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewDetalleExperiencias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registros: 4\nValoraciónes positivas: 3\nValoraciónes negativas: 2\nValoraciónes con foto: 1"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+        <!-- Aquí puedes personalizar el diseño para las experiencias -->
+    </androidx.cardview.widget.CardView>
+
+    <!-- Botón para cambiar foto de perfil -->
+    <LinearLayout
+        android:id="@+id/layoutCambiarFotoPerfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardViewExperiencias">
+
+        <!-- MÁS ADELANTE PROGRAMARÉ LA OPCIÓN DE HACER FOTO PARA CAMBIAR LA IMAGEN DE PERFIL -->
+
+        <ImageView
+            android:id="@+id/imageViewCameraIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icono_camara" />
+        <!--android:contentDescription="@string/desc_icon_camera"  Asegúrate de proporcionar una descripción accesible para la imagen -->
+
+        <TextView
+            android:id="@+id/textViewCambiarFoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cambiar foto de perfil"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

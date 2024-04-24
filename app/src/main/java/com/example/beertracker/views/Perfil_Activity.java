@@ -12,7 +12,7 @@ public class Perfil_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil);
+        setContentView(R.layout.activity_perfil_cardview);
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar); // Obtener el toolbar
 
         // Configurar el botón de volver al menú principal
