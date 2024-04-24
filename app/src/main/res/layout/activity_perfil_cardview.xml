@@ -115,7 +115,7 @@
                 android:id="@+id/textViewDetalleMisCervezas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registros: 4\nTipos: 3\nFavoritos: 1"
+                android:text="Registros: 4\nCon foto: 3\nFavoritos: 1"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
@@ -124,7 +124,7 @@
 
     <!-- CardView para Experiencias -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewExperiencias"
+        android:id="@+id/cardViewInteracciones"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -143,10 +143,10 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/textViewExperiencias"
+                android:id="@+id/textViewInteracciones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mis Cervezas"
+                android:text="Interacciones"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
@@ -155,11 +155,11 @@
                 android:id="@+id/textViewDetalleExperiencias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registros: 4\nValoraciónes positivas: 3\nValoraciónes negativas: 2\nValoraciónes con foto: 1"
+                android:text="Likes enviados: 12\nLikes Recibidos: 17\n"
                 android:textSize="16sp"
                 android:textColor="@android:color/black" />
         </LinearLayout>
-        <!-- Aquí puedes personalizar el diseño para las experiencias -->
+        <!-- Aquí puedes personalizar el diseño para las interacciones -->
     </androidx.cardview.widget.CardView>
 
     <!-- Botón para cambiar foto de perfil -->
@@ -172,7 +172,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardViewExperiencias">
+        app:layout_constraintTop_toBottomOf="@+id/cardViewInteracciones">
 
         <!-- MÁS ADELANTE PROGRAMARÉ LA OPCIÓN DE HACER FOTO PARA CAMBIAR LA IMAGEN DE PERFIL -->
 
