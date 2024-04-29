@@ -8,7 +8,7 @@
     tools:context=".views.Main_Menu_Activity"
     >
 
-    <!-- Favoritos -->
+    <!-- Favoritos
     <ImageView
         android:id="@+id/imaxgeViewFav"
         android:layout_width="wrap_content"
@@ -18,8 +18,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"/>
+        -->
 
-    <!-- Notificaciones -->
+    <!-- Notificaciones
     <ImageView
         android:id="@+id/imageViewNotifications"
         android:layout_width="wrap_content"
@@ -29,15 +30,23 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"/>
-
-    <!-- Perfiles -->
-    <!-- Aquí irían los perfiles de las personas a seguir -->
+-->
 
     <!-- Muro de publicaciones -->
-    <!-- Aquí irían las publicaciones de los usuarios -->
+    <!-- RecyclerView para la feed de publicaciones -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="8dp"/>
 
     <!-- Botones inferiores -->
     <LinearLayout
+        android:id="@+id/buttonsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
