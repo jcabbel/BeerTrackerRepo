@@ -45,6 +45,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.4")
     implementation("com.google.firebase:firebase-storage")
+    implementation("com.firebaseui:firebase-ui-storage:7.2.0")
+
+
 
 
 

@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
+import java.util.regex.Pattern;
 
 public class Registro_Usuario_Activity extends AppCompatActivity {
 
@@ -134,7 +135,7 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
                     Usuario usuario = new Usuario(email, nombre, apellidos, generoSeleccionado, fechaSeleccionada);
 
                     if (imageUri != null) {
-                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/profile_images/" + email + ".jpg");
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/profile_images/" + email);
                         storageReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
                             storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                                 usuario.setFotoUri(uri.toString());

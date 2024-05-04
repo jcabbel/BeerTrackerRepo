@@ -24,6 +24,14 @@ public class Usuario {
         this.genero = genero;
         this.fecha_nacimiento = fecha_nacimiento;
     }
+    public Usuario (String email, String nombre, String apellidos, int genero, LocalDate fecha_nacimiento, String fotoUri){
+        this.email = email;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.genero = genero;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.fotoUri = fotoUri;
+    }
 
     public String getEmail() {
         return email;

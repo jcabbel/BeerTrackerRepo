@@ -41,6 +41,7 @@
     import java.util.HashMap;
     import java.util.Map;
     import java.util.UUID;
+    import java.util.regex.Pattern;
 
     public class Registro_Experiencia_Activity extends AppCompatActivity {
 
@@ -105,7 +106,6 @@
             btnCancelarRegistro.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Volver a registrar.xml sin guardar la experiencia
                     volverARegistro();
                 }
             });
@@ -268,7 +268,7 @@
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Selecciona una foto"), PICK_IMAGE_REQUEST);
+            startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PICK_IMAGE_REQUEST);
         }
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -276,6 +276,7 @@
 
             if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
                 imageUri = data.getData();
+                Toast.makeText(Registro_Experiencia_Activity.this, "Imagen seleccionada", Toast.LENGTH_SHORT).show();
             }
         }
     }
