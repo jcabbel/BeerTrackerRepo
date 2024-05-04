@@ -3,6 +3,7 @@ package com.example.beertracker.views;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +18,15 @@ import com.example.beertracker.R;
 import com.example.beertracker.models.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 
 public class Registro_Usuario_Activity extends AppCompatActivity {
 
     Button btnRegister;
+    Button btnFoto;
     EditText editTextEmailRegister;
     EditText editTextPasswordRegister;
     EditText editTextName;
@@ -33,6 +37,8 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
     Button buttonFechaNacimiento;
     private int generoSeleccionado;
     private LocalDate fechaSeleccionada;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
@@ -42,6 +48,7 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_registro_usuario);
 
         btnRegister = findViewById(R.id.btnRegister);
+        btnFoto = findViewById(R.id.btnFoto);
         editTextEmailRegister = findViewById(R.id.editTextEmailRegister);
         editTextPasswordRegister = findViewById(R.id.editTextPasswordRegister);
         editTextName = findViewById(R.id.editTextName);
@@ -59,6 +66,13 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 registrarUsuario();
+            }
+        });
+
+        btnFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seleccionarFoto();
             }
         });
 
@@ -91,24 +105,57 @@ public class Registro_Usuario_Activity extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    public void registrarUsuario (){
+    private void seleccionarFoto() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Selecciona una foto"), PICK_IMAGE_REQUEST);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+        }
+    }
+
+    public void registrarUsuario() {
         String email = editTextEmailRegister.getText().toString().trim();
         String password = editTextPasswordRegister.getText().toString().trim();
         String nombre = editTextName.getText().toString();
         String apellidos = editTextLastName.getText().toString();
         generoSeleccionado = seleccionarGenero();
 
-
-        if (validarMail(email) && !password.isEmpty()){
+        if (validarMail(email) && !password.isEmpty()) {
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    Usuario usuario = new Usuario (email, nombre, apellidos, generoSeleccionado, fechaSeleccionada);
-                    db.collection("users").document(email).set(usuario);
-                    Intent intent = new Intent(Registro_Usuario_Activity.this, Login_Activity.class);
-                    intent.putExtra("email", email);
-                    startActivity(intent);
-                    finish();
+                if (task.isSuccessful()) {
+                    Usuario usuario = new Usuario(email, nombre, apellidos, generoSeleccionado, fechaSeleccionada);
+
+                    if (imageUri != null) {
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/profile_images/" + email + ".jpg");
+                        storageReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                            storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                                usuario.setFotoUri(uri.toString());
+                                db.collection("users").document(email).set(usuario);
+                                Intent intent = new Intent(Registro_Usuario_Activity.this, Login_Activity.class);
+                                intent.putExtra("email", email);
+                                startActivity(intent);
+                                finish();
+                            }).addOnFailureListener(exception -> {
+                                Toast.makeText(Registro_Usuario_Activity.this, "Error al obtener URL de la imagen", Toast.LENGTH_SHORT).show();
+                            });
+                        }).addOnFailureListener(exception -> {
+                            Toast.makeText(Registro_Usuario_Activity.this, "Error al subir imagen", Toast.LENGTH_SHORT).show();
+                        });
+                    } else {
+                        db.collection("users").document(email).set(usuario);
+                        Intent intent = new Intent(Registro_Usuario_Activity.this, Login_Activity.class);
+                        intent.putExtra("email", email);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
                     Toast.makeText(Registro_Usuario_Activity.this, "Error al registrar usuario", Toast.LENGTH_SHORT).show();
                 }

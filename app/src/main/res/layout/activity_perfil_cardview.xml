@@ -36,13 +36,12 @@
         android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bienvenido Eric"
-        android:textSize="18sp"
+        android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewInformacionPersonal"

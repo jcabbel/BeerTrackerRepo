@@ -8,6 +8,7 @@ public class Usuario {
     private String apellidos;
     private int genero;
     private LocalDate fecha_nacimiento;
+    private String fotoUri;
 
     public Usuario () {
 
@@ -62,6 +63,13 @@ public class Usuario {
 
     public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
         this.fecha_nacimiento = fecha_nacimiento;
+    }
+    public String getFotoUri() {
+        return fotoUri;
+    }
+
+    public void setFotoUri(String fotoUri) {
+        this.fotoUri = fotoUri;
     }
 
     @Override

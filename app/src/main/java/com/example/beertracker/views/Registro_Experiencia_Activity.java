@@ -3,6 +3,7 @@
     import static android.content.ContentValues.TAG;
 
     import android.content.Intent;
+    import android.net.Uri;
     import android.os.Bundle;
     import android.util.Log;
     import android.view.View;
@@ -31,11 +32,15 @@
     import com.google.firebase.firestore.FirebaseFirestore;
     import com.google.firebase.firestore.QueryDocumentSnapshot;
     import com.google.firebase.firestore.QuerySnapshot;
+    import com.google.firebase.storage.FirebaseStorage;
+    import com.google.firebase.storage.StorageReference;
+    import com.google.firebase.storage.UploadTask;
 
     import java.util.ArrayList;
     import java.util.Collections;
     import java.util.HashMap;
     import java.util.Map;
+    import java.util.UUID;
 
     public class Registro_Experiencia_Activity extends AppCompatActivity {
 
@@ -49,6 +54,8 @@
         Button btnGuardar;
         Button btnCancelarRegistro;
         Button btnCargarFoto;
+        private static final int PICK_IMAGE_REQUEST = 1;
+        Uri imageUri;
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -68,13 +75,11 @@
             etValoracion = findViewById(R.id.editTextValoracion);
             etObservaciones = findViewById(R.id.editTextObservaciones);
 
-            // Rellenar spinner de cervezas
             rellenarSpinnerCervezas();
 
             btnGuardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Validar la selección de cerveza antes de continuar
                     if (cervezaSeleccionada == null || cervezaSeleccionada.isEmpty()) {
                         Toast.makeText(Registro_Experiencia_Activity.this, "Elija una cerveza", Toast.LENGTH_SHORT).show();
                         return;
@@ -89,7 +94,7 @@
                     int valoracion = Integer.parseInt(etValoracion.getText().toString());
                     String observaciones = etObservaciones.getText().toString();
 
-                    agregarExperiencia(usuario, cerveza, sabor, lugar, valoracion, observaciones);
+                    agregarExperiencia(usuario, cerveza, sabor, lugar, valoracion, observaciones, imageUri);
                     Toast.makeText(Registro_Experiencia_Activity.this, "Experiencia añadida", Toast.LENGTH_SHORT).show();
 
                     // Volver a registrar.xml
@@ -108,8 +113,7 @@
             btnCargarFoto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Mostrar un mensaje Toast indicando que se requiere actualización
-                    Toast.makeText(Registro_Experiencia_Activity.this, "Función Cargar Foto disponible en futuras versiones", Toast.LENGTH_SHORT).show();
+                    seleccionarFoto();
                 }
             });
         }
@@ -120,38 +124,99 @@
             finish(); // Finalizar esta actividad para evitar volver atrás con el botón de retroceso
         }
 
-        private void agregarExperiencia(Usuario usuario, Cerveza cerveza, String sabor, String lugar, int valoracion, String observaciones) {
+        private void agregarExperiencia(Usuario usuario, Cerveza cerveza, String sabor, String lugar, int valoracion, String observaciones, Uri fotoUri) {
 
             String usuarioMail = usuario.getEmail();
             String cervezaId = cerveza.getId();
             String valoracionString = Integer.toString(valoracion);
 
-            Map<String, Object> data = new HashMap<>();
-            data.put("usuario", usuarioMail);
-            data.put("cerveza", cervezaId);
-            data.put("sabor", sabor);
-            data.put("lugar", lugar);
-            data.put("valoracion", valoracionString);
-            data.put("observaciones", observaciones);
-            data.put("timestamp", FieldValue.serverTimestamp());
+            // Verifica si hay una imagen seleccionada
+            if (fotoUri != null) {
+                // Crea una referencia al almacenamiento de Firebase
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference().child("images/experiences_images/" + UUID.randomUUID().toString());
 
-            db.collection("experiences")
-                    .add(data)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d(TAG, "Experiencia agregada con el ID: " + documentReference.getId());
-                            Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
-                            startActivity(intent);
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w(TAG, "Error añadiendo la experiencia", e);
-                        }
-                    });
+                // Sube la imagen al almacenamiento de Firebase
+                storageRef.putFile(fotoUri)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Obtiene la URL de descarga de la imagen
+                                storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        // URL de descarga de la imagen
+                                        String fotoUrl = uri.toString();
+
+                                        // Crea los datos para la experiencia
+                                        Map<String, Object> data = new HashMap<>();
+                                        data.put("usuario", usuarioMail);
+                                        data.put("cerveza", cervezaId);
+                                        data.put("sabor", sabor);
+                                        data.put("lugar", lugar);
+                                        data.put("valoracion", valoracionString);
+                                        data.put("observaciones", observaciones);
+                                        data.put("timestamp", FieldValue.serverTimestamp());
+                                        data.put("fotoUrl", fotoUrl); // Guarda la URL de descarga de la imagen
+
+                                        // Agrega los datos a Firestore
+                                        db.collection("experiences")
+                                                .add(data)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Log.d(TAG, "Experiencia agregada con el ID: " + documentReference.getId());
+                                                        Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error añadiendo la experiencia", e);
+                                                    }
+                                                });
+                                    }
+                                });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Maneja el fallo de subida de la imagen
+                                Log.e(TAG, "Error al subir la imagen", e);
+                            }
+                        });
+            } else {
+                // Si no hay imagen seleccionada, guarda los datos sin la URL de la imagen
+                Map<String, Object> data = new HashMap<>();
+                data.put("usuario", usuarioMail);
+                data.put("cerveza", cervezaId);
+                data.put("sabor", sabor);
+                data.put("lugar", lugar);
+                data.put("valoracion", valoracionString);
+                data.put("observaciones", observaciones);
+                data.put("timestamp", FieldValue.serverTimestamp());
+
+                // Agrega los datos a Firestore
+                db.collection("experiences")
+                        .add(data)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "Experiencia agregada con el ID: " + documentReference.getId());
+                                Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error añadiendo la experiencia", e);
+                            }
+                        });
+            }
         }
+
 
         public void rellenarSpinnerCervezas() {
             ArrayList<String> datos = new ArrayList<>();
@@ -197,6 +262,21 @@
                             }
                         }
                     });
+        }
+
+        private void seleccionarFoto() {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Selecciona una foto"), PICK_IMAGE_REQUEST);
+        }
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+                imageUri = data.getData();
+            }
         }
     }
 

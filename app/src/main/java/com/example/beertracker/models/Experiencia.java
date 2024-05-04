@@ -8,6 +8,7 @@ public class Experiencia {
     private String lugar;
     private int valoracion;
     private String observaciones;
+    private String fotoUri;
 
     public Experiencia(){
 
@@ -81,5 +82,13 @@ public class Experiencia {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public String getFotoUri() {
+        return fotoUri;
+    }
+
+    public void setFotoUri(String fotoUri) {
+        this.fotoUri = fotoUri;
     }
 }
