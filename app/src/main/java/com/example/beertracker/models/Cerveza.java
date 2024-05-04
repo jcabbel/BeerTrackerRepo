@@ -1,36 +1,28 @@
 package com.example.beertracker.models;
 
 public class Cerveza {
-    private int id;
+    private String id;
     private String nombre;
-    private String pais;
-    private String tipo;
     private String marca;
-    private double precio;
-    private double graduacion;
 
     public Cerveza(){
     }
 
-    public Cerveza(int id) {
+    public Cerveza(String id) {
         this.id = id;
     }
 
-    public Cerveza(int id, String nombre, String pais, String tipo, String marca, double precio, double graduacion) {
+    public Cerveza(String id, String nombre, String marca) {
         this.id = id;
         this.nombre = nombre;
-        this.pais = pais;
-        this.tipo = tipo;
         this.marca = marca;
-        this.precio = precio;
-        this.graduacion = graduacion;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -42,22 +34,6 @@ public class Cerveza {
         this.nombre = nombre;
     }
 
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public String getMarca() {
         return marca;
     }
@@ -66,17 +42,4 @@ public class Cerveza {
         this.marca = marca;
     }
 
-    public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public double getGraduacion(){return graduacion;}
-
-    public void setGraduacion(double graduacion){
-        this.graduacion = graduacion;
-    }
 }

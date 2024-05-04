@@ -1,56 +1,202 @@
-package com.example.beertracker.views;
+    package com.example.beertracker.views;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+    import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
+    import android.content.Intent;
+    import android.os.Bundle;
+    import android.util.Log;
+    import android.view.View;
+    import android.widget.AdapterView;
+    import android.widget.ArrayAdapter;
+    import android.widget.Button;
+    import android.widget.EditText;
+    import android.widget.Spinner;
+    import android.widget.Toast;
 
-import com.example.beertracker.R;
+    import androidx.annotation.NonNull;
+    import androidx.appcompat.app.AppCompatActivity;
 
-public class Registro_Experiencia_Activity extends AppCompatActivity {
+    import com.example.beertracker.R;
+    import com.example.beertracker.models.Cerveza;
+    import com.example.beertracker.models.Usuario;
+    import com.google.android.gms.tasks.OnCompleteListener;
+    import com.google.android.gms.tasks.OnFailureListener;
+    import com.google.android.gms.tasks.OnSuccessListener;
+    import com.google.android.gms.tasks.Task;
+    import com.google.firebase.auth.FirebaseAuth;
+    import com.google.firebase.auth.FirebaseUser;
+    import com.google.firebase.firestore.CollectionReference;
+    import com.google.firebase.firestore.DocumentReference;
+    import com.google.firebase.firestore.FieldValue;
+    import com.google.firebase.firestore.FirebaseFirestore;
+    import com.google.firebase.firestore.QueryDocumentSnapshot;
+    import com.google.firebase.firestore.QuerySnapshot;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro_experiencia);
+    import java.util.ArrayList;
+    import java.util.Collections;
+    import java.util.HashMap;
+    import java.util.Map;
 
-        Button btnGuardar = findViewById(R.id.btnGuardar);
-        Button btnCancelarRegistro = findViewById(R.id.btnCancelar);
-        Button btnCargarFoto = findViewById(R.id.btnCargarFoto);
+    public class Registro_Experiencia_Activity extends AppCompatActivity {
 
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Mostrar un mensaje Toast al guardar
-                Toast.makeText(Registro_Experiencia_Activity.this, "Función Guardar Experiencia disponible en futuras versiones", Toast.LENGTH_SHORT).show();
-                // Volver a registrar.xml
-                volverARegistro();
-            }
-        });
+        Spinner spinnerCervezas;
+        EditText etSabor;
+        EditText etLugar;
+        EditText etValoracion;
+        EditText etObservaciones;
+        String cervezaSeleccionada;
+        String idSeleccionado;
+        Button btnGuardar;
+        Button btnCancelarRegistro;
+        Button btnCargarFoto;
 
-        btnCancelarRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Volver a registrar.xml sin guardar la experiencia
-                volverARegistro();
-            }
-        });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        btnCargarFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Mostrar un mensaje Toast indicando que se requiere actualización
-                Toast.makeText(Registro_Experiencia_Activity.this, "Función Cargar Foto disponible en futuras versiones", Toast.LENGTH_SHORT).show();
-            }
-        });
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_registro_experiencia);
+
+            btnGuardar = findViewById(R.id.btnGuardar);
+            btnCancelarRegistro = findViewById(R.id.btnCancelar);
+            btnCargarFoto = findViewById(R.id.btnCargarFoto);
+
+            spinnerCervezas = findViewById(R.id.spinnerCerveza);
+
+            etSabor = findViewById(R.id.editTextSabor);
+            etLugar = findViewById(R.id.editTextLugar);
+            etValoracion = findViewById(R.id.editTextValoracion);
+            etObservaciones = findViewById(R.id.editTextObservaciones);
+
+            // Rellenar spinner de cervezas
+            rellenarSpinnerCervezas();
+
+            btnGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Validar la selección de cerveza antes de continuar
+                    if (cervezaSeleccionada == null || cervezaSeleccionada.isEmpty()) {
+                        Toast.makeText(Registro_Experiencia_Activity.this, "Elija una cerveza", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
+                    Usuario usuario = new Usuario(usuarioFirebase.getEmail());
+                    Cerveza cerveza = new Cerveza(idSeleccionado);
+
+                    String sabor = etSabor.getText().toString();
+                    String lugar = etLugar.getText().toString();
+                    int valoracion = Integer.parseInt(etValoracion.getText().toString());
+                    String observaciones = etObservaciones.getText().toString();
+
+                    agregarExperiencia(usuario, cerveza, sabor, lugar, valoracion, observaciones);
+                    Toast.makeText(Registro_Experiencia_Activity.this, "Experiencia añadida", Toast.LENGTH_SHORT).show();
+
+                    // Volver a registrar.xml
+                    volverARegistro();
+                }
+            });
+
+            btnCancelarRegistro.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Volver a registrar.xml sin guardar la experiencia
+                    volverARegistro();
+                }
+            });
+
+            btnCargarFoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Mostrar un mensaje Toast indicando que se requiere actualización
+                    Toast.makeText(Registro_Experiencia_Activity.this, "Función Cargar Foto disponible en futuras versiones", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        private void volverARegistro() {
+            Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
+            startActivity(intent);
+            finish(); // Finalizar esta actividad para evitar volver atrás con el botón de retroceso
+        }
+
+        private void agregarExperiencia(Usuario usuario, Cerveza cerveza, String sabor, String lugar, int valoracion, String observaciones) {
+
+            String usuarioMail = usuario.getEmail();
+            String cervezaId = cerveza.getId();
+            String valoracionString = Integer.toString(valoracion);
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("usuario", usuarioMail);
+            data.put("cerveza", cervezaId);
+            data.put("sabor", sabor);
+            data.put("lugar", lugar);
+            data.put("valoracion", valoracionString);
+            data.put("observaciones", observaciones);
+            data.put("timestamp", FieldValue.serverTimestamp());
+
+            db.collection("experiences")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "Experiencia agregada con el ID: " + documentReference.getId());
+                            Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error añadiendo la experiencia", e);
+                        }
+                    });
+        }
+
+        public void rellenarSpinnerCervezas() {
+            ArrayList<String> datos = new ArrayList<>();
+            ArrayList<String> ids = new ArrayList<>();
+            db.collection("beers")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String nombre = document.getString("nombre");
+                                    String marca = document.getString("marca");
+                                    String id = document.getString("id");
+                                    String nombreYMarca = marca + " - " + nombre;
+                                    datos.add(nombreYMarca);
+                                    ids.add(id);
+                                }
+
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(Registro_Experiencia_Activity.this,
+                                        android.R.layout.simple_spinner_item, datos);
+                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                                spinnerCervezas.setAdapter(adapter);
+
+                                // Asignar el listener después de que el spinner tenga datos
+                                spinnerCervezas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                                        cervezaSeleccionada = parentView.getItemAtPosition(position).toString();
+                                        idSeleccionado = ids.get(position);
+                                        btnGuardar.setEnabled(true);
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parentView) {
+                                        cervezaSeleccionada = "";
+                                        btnGuardar.setEnabled(false);
+                                        Toast.makeText(Registro_Experiencia_Activity.this, "Elija una cerveza", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Log.d(TAG, "Error obteniendo resultados: ", task.getException());
+                            }
+                        }
+                    });
+        }
     }
 
-    private void volverARegistro() {
-        Intent intent = new Intent(Registro_Experiencia_Activity.this, Registrar_Activity.class);
-        startActivity(intent);
-        finish(); // Finalizar esta actividad para evitar volver atrás con el botón de retroceso
-    }
-}

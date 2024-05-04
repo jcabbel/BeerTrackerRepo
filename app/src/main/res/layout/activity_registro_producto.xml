@@ -32,54 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/textViewPais"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="País:" />
-
-    <EditText
-        android:id="@+id/editTextPais"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/textViewGraduacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Graduación:" />
-
-    <EditText
-        android:id="@+id/editTextGraduacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:inputType="numberDecimal" />
-
-    <TextView
-        android:id="@+id/textViewTipo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tipo:" />
-
-    <EditText
-        android:id="@+id/editTextTipo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/textViewPrecio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Precio:" />
-
-    <EditText
-        android:id="@+id/editTextPrecio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <!-- Botón para cargar la foto -->
     <Button
         android:id="@+id/btnCargarFoto"

@@ -28,11 +28,7 @@ import java.util.Map;
 public class Registro_Producto_Activity extends AppCompatActivity {
 
     private EditText etNombre;
-    private EditText etPais;
-    private EditText etTipo;
     private EditText etMarca;
-    private EditText etPrecio;
-    private EditText etGraduacion;
     private Button btnGuardar;
     private Button btnCancelar;
     private Button btnCargarFoto;
@@ -48,30 +44,19 @@ public class Registro_Producto_Activity extends AppCompatActivity {
         btnCargarFoto = findViewById(R.id.btnCargarFoto);
 
         etNombre = findViewById(R.id.editTextNombre);
-        etPais = findViewById(R.id.editTextPais);
-        etTipo = findViewById(R.id.editTextTipo);
         etMarca = findViewById(R.id.editTextMarca);
-        etPrecio = findViewById(R.id.editTextPrecio);
-        etGraduacion = findViewById(R.id.editTextGraduacion);
-
-        DbCervezas db = new DbCervezas(this);
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String etNombreString = etNombre.getText().toString();
-                String etPaisString = etPais.getText().toString();
-                String etTipoString = etTipo.getText().toString();
                 String etMarcaString = etMarca.getText().toString();
-                double etPrecioDouble = Double.parseDouble(String.valueOf(etPrecio.getText()));
-                double etGraduacionDouble = Double.parseDouble(String.valueOf(etGraduacion.getText()));
 
-                if (etNombreString.isEmpty() || etPaisString.isEmpty() || etTipoString.isEmpty() || etMarcaString.isEmpty()) {
+                if (etNombreString.isEmpty() || etMarcaString.isEmpty()) {
                     Toast.makeText(Registro_Producto_Activity.this, "Por favor, rellene todos los campos", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    agregarCerveza(etNombreString, etPaisString, etTipoString, etMarcaString, etPrecioDouble, etGraduacionDouble);
+                                    } else {
+                    agregarCerveza(etNombreString, etMarcaString);
                 }
 
 
@@ -97,14 +82,10 @@ public class Registro_Producto_Activity extends AppCompatActivity {
         });
     }
 
-    public void agregarCerveza(String nombre, String pais, String tipo, String marca, double precio, double graduacion){
+    public void agregarCerveza(String nombre, String marca) {
         Map<String, Object> data = new HashMap<>();
         data.put("nombre", nombre);
-        data.put("pais", pais);
-        data.put("tipo", tipo);
         data.put("marca", marca);
-        data.put("precio", precio);
-        data.put("graduacion", graduacion);
         data.put("timestamp", FieldValue.serverTimestamp());
 
         db.collection("beers")
@@ -112,19 +93,34 @@ public class Registro_Producto_Activity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSo agregado con el ID: " + documentReference.getId());
-                        Intent intent = new Intent(Registro_Producto_Activity.this, Registrar_Activity.class);
-                        startActivity(intent);
-                        finish();
+                        Toast.makeText(Registro_Producto_Activity.this, "Cerveza añadida", Toast.LENGTH_SHORT).show();
+                        String docId = documentReference.getId();
+                        Log.d(TAG, "Documento agregado con el ID: " + docId);
+
+                        documentReference.update("id", docId)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "ID agregado al documento");
+                                        Intent intent = new Intent(Registro_Producto_Activity.this, Registrar_Activity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error al agregar ID al documento", e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error añadiendo el documento", e);
+                        Toast.makeText(Registro_Producto_Activity.this, "Error al agregar la cerveza", Toast.LENGTH_SHORT).show();
+                        Log.w(TAG, "Error al agregar documento", e);
                     }
                 });
-
     }
-
 }

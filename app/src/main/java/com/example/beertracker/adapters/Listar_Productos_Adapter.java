@@ -34,19 +34,10 @@ public class Listar_Productos_Adapter extends ArrayAdapter<Cerveza> {
         Cerveza cerveza = alCervezas.get(position);
 
         TextView tvNombre = rowView.findViewById(R.id.tvNombre);
-        TextView tvPais = rowView.findViewById(R.id.tvPais);
-        TextView tvTipo = rowView.findViewById(R.id.tvTipo);
         TextView tvMarca = rowView.findViewById(R.id.tvMarca);
-        TextView tvPrecio = rowView.findViewById(R.id.tvPrecio);
-        TextView tvGraduacion = rowView.findViewById(R.id.tvGraduacion);
 
         tvNombre.setText(cerveza.getNombre());
-        tvPais.setText(cerveza.getPais());
-        tvTipo.setText(cerveza.getTipo());
         tvMarca.setText(cerveza.getMarca());
-        tvPrecio.setText(String.valueOf(cerveza.getPrecio()));
-        tvGraduacion.setText(String.valueOf(cerveza.getGraduacion()));
-
 
         return rowView;
     }

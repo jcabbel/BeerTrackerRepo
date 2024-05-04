@@ -63,13 +63,9 @@ public class DbCervezas extends DbHelper {
         if (cursorCervezas.moveToFirst()){
             do{
                 cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
 
                 listaCervezas.add(cerveza);
             } while (cursorCervezas.moveToNext());
@@ -112,13 +108,9 @@ public class DbCervezas extends DbHelper {
         if (cursorCervezas.moveToFirst()) {
             do {
                 Cerveza cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
 
                 listaCervezas.add(cerveza);
             } while (cursorCervezas.moveToNext());
@@ -140,13 +132,9 @@ public class DbCervezas extends DbHelper {
         if (cursorCervezas.moveToFirst()) {
             do {
                 Cerveza cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
 
                 listaCervezas.add(cerveza);
             } while (cursorCervezas.moveToNext());
@@ -168,13 +156,9 @@ public class DbCervezas extends DbHelper {
         if (cursorCervezas.moveToFirst()) {
             do {
                 Cerveza cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
 
                 listaCervezas.add(cerveza);
             } while (cursorCervezas.moveToNext());
@@ -198,13 +182,9 @@ public class DbCervezas extends DbHelper {
 
             if (cursorCervezas.moveToFirst()) {
                 cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
             }
 
             cursorCervezas.close();
@@ -264,13 +244,9 @@ public class DbCervezas extends DbHelper {
         if (cursorCervezas.moveToFirst()){
             do{
                 cerveza = new Cerveza();
-                cerveza.setId(cursorCervezas.getInt(0));
+                cerveza.setId(cursorCervezas.getString(0));
                 cerveza.setNombre(cursorCervezas.getString(1));
-                cerveza.setPais(cursorCervezas.getString(2));
-                cerveza.setTipo(cursorCervezas.getString(3));
-                cerveza.setMarca(cursorCervezas.getString(4));
-                cerveza.setPrecio(cursorCervezas.getDouble(5));
-                cerveza.setGraduacion(cursorCervezas.getDouble(6));
+                cerveza.setMarca(cursorCervezas.getString(2));
 
                 listaCervezas.add(cerveza);
             } while (cursorCervezas.moveToNext());
@@ -278,7 +254,7 @@ public class DbCervezas extends DbHelper {
         cursorCervezas.close();
 
         for (Cerveza c : listaCervezas) {
-            if (c.getId() == id) {
+            if (c.getId().equals(id)) {
                 return true;
             }
         }

@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:text="Cerveza:" />
 
-    <EditText
-        android:id="@+id/editTextCerveza"
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/spinnerCerveza"
+        android:layout_width="377dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
