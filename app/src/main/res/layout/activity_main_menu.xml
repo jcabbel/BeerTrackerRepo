@@ -8,30 +8,6 @@
     tools:context=".views.Main_Menu_Activity"
     >
 
-    <!-- Favoritos
-    <ImageView
-        android:id="@+id/imaxgeViewFav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_favoritos"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
-        -->
-
-    <!-- Notificaciones
-    <ImageView
-        android:id="@+id/imageViewNotifications"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icono_notificaciones"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"/>
--->
-
     <!-- Muro de publicaciones -->
     <!-- RecyclerView para la feed de publicaciones -->
     <!-- Este recycler debe contener elementos muro_publicación -->
@@ -73,7 +49,8 @@
             android:layout_weight="1"
             android:text="Buscar"
             android:background="@drawable/button_rectangular_background" />
-
+        <!-- Boton de Muro que nos mantiene en la feed-->
+        <!-- O si estamos en otra pestaña, nos trae a la feed -->
         <Button
             android:id="@+id/btnMuro"
             android:layout_width="0dp"
