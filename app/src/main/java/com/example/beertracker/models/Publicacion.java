@@ -3,12 +3,16 @@ package com.example.beertracker.models;
 public class Publicacion {
     private String usuario;
     private String descripcion;
-    private int imagenPerfil;
-    private int imagenPublicacion;
+    private String imagenPerfil;
+    private String imagenPublicacion;
     private int likes;
     private String comentarios;
 
-    public Publicacion(String usuario, String descripcion, int imagenPerfil, int imagenPublicacion, int likes, String comentarios) {
+    public Publicacion (){
+
+    }
+
+    public Publicacion(String usuario, String descripcion, String imagenPerfil, String imagenPublicacion, int likes, String comentarios) {
         this.usuario = usuario;
         this.descripcion = descripcion;
         this.imagenPerfil = imagenPerfil;
@@ -25,11 +29,11 @@ public class Publicacion {
         return descripcion;
     }
 
-    public int getImagenPerfil() {
+    public String getImagenPerfil() {
         return imagenPerfil;
     }
 
-    public int getImagenPublicacion() {
+    public String getImagenPublicacion() {
         return imagenPublicacion;
     }
 

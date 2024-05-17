@@ -87,7 +87,6 @@ public class Experiencia {
     public String getFotoUri() {
         return fotoUri;
     }
-
     public void setFotoUri(String fotoUri) {
         this.fotoUri = fotoUri;
     }

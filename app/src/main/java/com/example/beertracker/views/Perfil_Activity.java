@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +66,7 @@ public class Perfil_Activity extends AppCompatActivity {
                                 String fotoUri = document.getString("fotoUri");
                                 Glide.with(Perfil_Activity.this)
                                         .load(fotoUri)
+                                        .placeholder(R.drawable.beer_bw)
                                         .into(imageView);
                             }
                         }

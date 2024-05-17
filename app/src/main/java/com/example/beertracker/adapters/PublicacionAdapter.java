@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.beertracker.R;
 import com.example.beertracker.models.Publicacion;
 
@@ -35,8 +37,17 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
         Publicacion publicacion = publicaciones.get(position);
         holder.usuario.setText(publicacion.getUsuario());
         holder.descripcion.setText(publicacion.getDescripcion());
-        holder.imagenPerfil.setImageResource(publicacion.getImagenPerfil());
-        holder.imagenPublicacion.setImageResource(publicacion.getImagenPublicacion());
+
+        Glide.with(holder.itemView.getContext())
+                .load(publicacion.getImagenPerfil())
+                .apply(new RequestOptions().placeholder(R.drawable.beer_bw))
+                .into(holder.imagenPerfil);
+
+        Glide.with(holder.itemView.getContext())
+                .load(publicacion.getImagenPublicacion())
+                .apply(new RequestOptions().placeholder(R.drawable.beer_bw))
+                .into(holder.imagenPublicacion);
+
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
         holder.verComentarios.setText(publicacion.getComentarios());
     }
