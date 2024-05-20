@@ -73,12 +73,20 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewDetalleInformacionPersonal"
+                android:id="@+id/textViewNombre"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre: Eric Escuder\nEdad: 26\nCorreo: eresber15@gmail.com"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
+                android:layout_height="20dp"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/textViewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

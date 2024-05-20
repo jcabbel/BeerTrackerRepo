@@ -42,8 +42,8 @@ public class Main_Menu_Activity extends AppCompatActivity {
 
         Log.d("DemoPublicaciones", "Llamando a getDemoPublicaciones()");
 
-        // Obtener lista de publicaciones demo
-        FirebaseHelper.getPublicaciones(new FirebaseHelper.FirestoreCallback() {
+        // Obtener lista de publicaciones
+        FirebaseHelper.getPublicaciones(new FirebaseHelper.publicacionesCallback() {
             @Override
             public void onCallback(List<Publicacion> publicacionesRecibidas) {
                 Log.d("DemoPublicaciones", "onCallback() llamado");
@@ -87,7 +87,7 @@ public class Main_Menu_Activity extends AppCompatActivity {
         btnWall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                publicacionAdapter.notifyDataSetChanged();
+                recreate();
             }
         });
 

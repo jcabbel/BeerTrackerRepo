@@ -51,7 +51,7 @@
             android:id="@+id/megusta"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ic_megusta" />
+            android:src="@drawable/nomegusta" />
 
         <!-- Botón de "Comentarios" -->
         <ImageView

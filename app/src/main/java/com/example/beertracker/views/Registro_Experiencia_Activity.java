@@ -19,6 +19,7 @@
 
     import com.example.beertracker.R;
     import com.example.beertracker.models.Cerveza;
+    import com.example.beertracker.models.NombreMarca;
     import com.example.beertracker.models.Usuario;
     import com.google.android.gms.tasks.OnCompleteListener;
     import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +39,7 @@
 
     import java.util.ArrayList;
     import java.util.Collections;
+    import java.util.Comparator;
     import java.util.HashMap;
     import java.util.Map;
     import java.util.UUID;
@@ -156,7 +158,8 @@
                                         data.put("valoracion", valoracionString);
                                         data.put("observaciones", observaciones);
                                         data.put("timestamp", FieldValue.serverTimestamp());
-                                        data.put("fotoUrl", fotoUrl); // Guarda la URL de descarga de la imagen
+                                        data.put("fotoUrl", fotoUrl);
+                                        data.put("likes", 0);
 
                                         // Agrega los datos a Firestore
                                         db.collection("experiences")
@@ -196,6 +199,8 @@
                 data.put("valoracion", valoracionString);
                 data.put("observaciones", observaciones);
                 data.put("timestamp", FieldValue.serverTimestamp());
+                data.put("likes", 0);
+
 
                 // Agrega los datos a Firestore
                 db.collection("experiences")
@@ -219,7 +224,7 @@
 
 
         public void rellenarSpinnerCervezas() {
-            ArrayList<String> datos = new ArrayList<>();
+            ArrayList<NombreMarca> datos = new ArrayList<>();
             ArrayList<String> ids = new ArrayList<>();
             db.collection("beers")
                     .get()
@@ -231,13 +236,27 @@
                                     String nombre = document.getString("nombre");
                                     String marca = document.getString("marca");
                                     String id = document.getString("id");
-                                    String nombreYMarca = marca + " - " + nombre;
-                                    datos.add(nombreYMarca);
+                                    NombreMarca nombreMarca = new NombreMarca(nombre, marca, id);
+                                    datos.add(nombreMarca);
                                     ids.add(id);
                                 }
 
+                                // Ordenar la lista de objetos NombreMarca por nombre y marca
+                                Collections.sort(datos, new Comparator<NombreMarca>() {
+                                    @Override
+                                    public int compare(NombreMarca nm1, NombreMarca nm2) {
+                                        return nm1.getNombreMarca().compareTo(nm2.getNombreMarca());
+                                    }
+                                });
+
+                                // Crear una lista de nombres para el adaptador del Spinner
+                                ArrayList<String> nombres = new ArrayList<>();
+                                for (NombreMarca nm : datos) {
+                                    nombres.add(nm.getNombreMarca());
+                                }
+
                                 ArrayAdapter<String> adapter = new ArrayAdapter<>(Registro_Experiencia_Activity.this,
-                                        android.R.layout.simple_spinner_item, datos);
+                                        android.R.layout.simple_spinner_item, nombres);
                                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                 spinnerCervezas.setAdapter(adapter);
 
@@ -246,7 +265,7 @@
                                     @Override
                                     public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                                         cervezaSeleccionada = parentView.getItemAtPosition(position).toString();
-                                        idSeleccionado = ids.get(position);
+                                        idSeleccionado = datos.get(position).getId(); // Obtener la ID correspondiente
                                         btnGuardar.setEnabled(true);
                                     }
 
@@ -264,7 +283,8 @@
                     });
         }
 
-        private void seleccionarFoto() {
+
+            private void seleccionarFoto() {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);

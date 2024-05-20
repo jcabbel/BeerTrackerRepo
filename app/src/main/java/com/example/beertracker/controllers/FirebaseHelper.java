@@ -4,31 +4,44 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.beertracker.models.Publicacion;
+import com.example.beertracker.models.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.threeten.bp.LocalDate;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseHelper {
 
-    public interface FirestoreCallback {
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    public interface publicacionesCallback {
         void onCallback(List<Publicacion> publicaciones);
         void onFailure(Exception e);
     }
 
-    public static void getPublicaciones(FirestoreCallback callback) {
+    public interface usuariosCallback {
+        void onCallback(Usuario usuario);
+        void onFailure(Exception e);
+    }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    public static void getPublicaciones(publicacionesCallback callback) {
+
         List<Publicacion> publicaciones = new ArrayList<>();
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("experiences")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -49,16 +62,24 @@ public class FirebaseHelper {
 
                                         if (documentSnapshot.exists()) {
                                             String nombre = documentSnapshot.getString("nombre") + " " + documentSnapshot.getString("apellidos");
+                                            String experiencia = document.getId();
                                             String descripcion = document.getString("observaciones");
                                             String imagenPerfil = documentSnapshot.getString("fotoUri");
                                             String imagenPublicacion = document.getString("fotoUrl");
-                                            int likes = 1;
+                                            Timestamp timestamp = document.getTimestamp("timestamp");
+                                            long likes = document.getLong("likes");
                                             String comentarios = "Comentarios";
 
-                                            publicaciones.add(new Publicacion(nombre, descripcion, imagenPerfil, imagenPublicacion, likes, comentarios));
+                                            publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, comentarios, timestamp));
                                             Log.d("DemoPublicaciones", "Número de publicaciones: " + publicaciones.size());
 
                                             if (publicaciones.size() == task.getResult().size()) {
+                                                Collections.sort(publicaciones, new Comparator<Publicacion>() {
+                                                    @Override
+                                                    public int compare(Publicacion p1, Publicacion p2) {
+                                                        return p2.getTimestamp().compareTo(p1.getTimestamp());
+                                                    }
+                                                });
                                                 callback.onCallback(publicaciones);
                                             }
                                         }
@@ -74,4 +95,41 @@ public class FirebaseHelper {
                     }
                     });
         }
+
+    public static void getUsuarioDB(String email, final usuariosCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userRef = db.collection("users").document(email);
+        userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    String nombre = documentSnapshot.getString("nombre");
+                    String apellidos = documentSnapshot.getString("apellidos");
+                    String fotoUri = documentSnapshot.getString("fotoUri");
+                    Long genero = documentSnapshot.getLong("genero");
+
+                    Map<String, Object> fechaNacimientoMap = (Map<String, Object>) documentSnapshot.get("fecha_nacimiento");
+                    LocalDate fechaNacimiento = null;
+                    if (fechaNacimientoMap != null) {
+                        int year = ((Long) fechaNacimientoMap.get("year")).intValue();
+                        int month = ((Long) fechaNacimientoMap.get("monthValue")).intValue();
+                        int day = ((Long) fechaNacimientoMap.get("dayOfMonth")).intValue();
+                        fechaNacimiento = LocalDate.of(year, month, day);
+                    }
+
+                    Usuario usuario = new Usuario(email, nombre, apellidos, genero != null ? genero.intValue() : 0, fechaNacimiento, fotoUri);
+                    callback.onCallback(usuario);
+
+                } else {
+                    callback.onCallback(null);  // Usuario no encontrado
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFailure(e);
+            }
+        });
+    }
+
 }

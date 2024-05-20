@@ -11,9 +11,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.beertracker.R;
+import com.example.beertracker.controllers.FirebaseHelper;
 import com.example.beertracker.models.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,9 +29,12 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.regex.Pattern;
 
-public class Perfil_Activity extends AppCompatActivity {
+public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper.usuariosCallback {
 
     private ImageView imageView;
+    private TextView textViewNombre;
+    private TextView textViewEmail;
+
     String fotoUri;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -39,11 +44,16 @@ public class Perfil_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_perfil_cardview);
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         imageView = findViewById(R.id.imageView);
+        textViewNombre = findViewById(R.id.textViewNombre);
+        textViewEmail = findViewById(R.id.textViewEmail);
+
 
         FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
-        String usuarioId = usuarioFirebase.getEmail();
-
-        cargarImagenPerfil(usuarioId);
+        if (usuarioFirebase != null) {
+            String usuarioId = usuarioFirebase.getEmail();
+            FirebaseHelper firebaseHelper = new FirebaseHelper();
+            firebaseHelper.getUsuarioDB(usuarioId, this);
+        }
 
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -72,5 +82,25 @@ public class Perfil_Activity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onCallback(Usuario usuario) { if (usuario != null) {
+        textViewNombre.setText(usuario.getNombre() + " " + usuario.getApellidos());
+        textViewEmail.setText(usuario.getEmail());
+
+        Glide.with(Perfil_Activity.this)
+                .load(usuario.getFotoUri())
+                .placeholder(R.drawable.beer_bw)
+                .into(imageView);
+    } else {
+        Log.d(TAG, "Usuario no encontrado");
+    }
+
+    }
+
+    @Override
+    public void onFailure(Exception e) {
+        Log.e(TAG, "Error al obtener el usuario", e);
     }
 }
