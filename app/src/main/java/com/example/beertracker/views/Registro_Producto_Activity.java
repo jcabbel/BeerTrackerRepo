@@ -14,8 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.beertracker.R;
-import com.example.beertracker.controllers.DbCervezas;
-import com.example.beertracker.models.Cerveza;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;

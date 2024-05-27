@@ -3,11 +3,7 @@ package com.example.beertracker.views;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.Toast;
-
-import com.example.beertracker.controllers.DbHelper;
 
 public class Bienvenida_Activity extends AppCompatActivity {
 

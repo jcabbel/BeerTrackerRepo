@@ -49,7 +49,7 @@
             android:name=".views.Main_Menu_Activity"
             android:exported="false" />
         <activity
-            android:name=".views.Buscar_Activity"
+            android:name=".views.Mis_Publicaciones_Activity"
             android:exported="false" />
         <activity
             android:name=".views.Bienvenida_Activity"

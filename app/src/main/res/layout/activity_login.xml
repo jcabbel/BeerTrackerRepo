@@ -6,16 +6,19 @@
     android:layout_height="match_parent"
     android:background="@color/amarillo_suave"
     tools:context=".views.Login_Activity">
-    >
+
     <ImageView
         android:id="@+id/imageViewLogo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/logo_login"
-        app:layout_constraintBottom_toTopOf="@+id/textViewWelcome"
+        android:layout_width="136dp"
+        android:layout_height="134dp"
+        android:src="@drawable/beer_bw"
+        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textViewWelcome"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.3"/>
 
     <TextView
         android:id="@+id/textViewWelcome"
@@ -23,24 +26,24 @@
         android:layout_height="wrap_content"
         android:text="¡Bienvenido a Beertracker!"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewLogo"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmail" />
 
     <EditText
         android:id="@+id/editTextEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/edittext_bg"
         android:hint="Correo electrónico"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewWelcome"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPassword" />
 
     <EditText
         android:id="@+id/editTextPassword"
@@ -54,7 +57,8 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin" />
 
     <Button
         android:id="@+id/btnLogin"
@@ -67,7 +71,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword"
+        app:layout_constraintBottom_toTopOf="@+id/textViewRegister" />
 
     <TextView
         android:id="@+id/textViewRegister"
@@ -77,7 +82,8 @@
         android:text="¿Aún no estás registrado?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintBottom_toTopOf="@+id/textViewForgotPassword" />
 
     <TextView
         android:id="@+id/textViewForgotPassword"
@@ -87,6 +93,7 @@
         android:text="¿Olvidaste tu contraseña?"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRegister" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewRegister"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

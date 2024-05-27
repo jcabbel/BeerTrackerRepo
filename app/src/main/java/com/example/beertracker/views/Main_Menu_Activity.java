@@ -79,7 +79,7 @@ public class Main_Menu_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Cuando se presiona el botón "Buscar", iniciar la actividad de búsqueda
-                Intent intent = new Intent(Main_Menu_Activity.this, Buscar_Activity.class);
+                Intent intent = new Intent(Main_Menu_Activity.this, Mis_Publicaciones_Activity.class);
                 startActivity(intent);
             }
         });

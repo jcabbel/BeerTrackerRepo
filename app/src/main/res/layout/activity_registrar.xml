@@ -38,7 +38,7 @@
         android:id="@+id/btnProducto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PRODUCTO"
+        android:text="CERVEZA"
         android:layout_below="@id/textViewTitulo"
         android:layout_marginTop="32dp"
         android:layout_centerHorizontal="true"/>

@@ -97,7 +97,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 .into(holder.imagenPublicacion);
 
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
-        holder.verComentarios.setText(publicacion.getComentarios());
+        holder.textoCerveza.setText("TODO");
     }
 
     private void checkUserLike(String experienciaId, String usuarioId, ImageView megusta) {
@@ -123,19 +123,18 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
 
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imagenPerfil, imagenPublicacion, megusta, comentarios;
-        TextView usuario, descripcion, textoMegusta, verComentarios;
+        ImageView imagenPerfil, imagenPublicacion, megusta;
+        TextView usuario, descripcion, textoMegusta, textoCerveza;
 
         public PublicacionViewHolder(View itemView) {
             super(itemView);
             imagenPerfil = itemView.findViewById(R.id.imagen_perfil);
             imagenPublicacion = itemView.findViewById(R.id.publicacion);
             megusta = itemView.findViewById(R.id.megusta);
-            comentarios = itemView.findViewById(R.id.comentarios);
             usuario = itemView.findViewById(R.id.usuario);
             descripcion = itemView.findViewById(R.id.descripcion);
             textoMegusta = itemView.findViewById(R.id.textoMegusta);
-            verComentarios = itemView.findViewById(R.id.ver_comentarios);
+            textoCerveza = itemView.findViewById(R.id.textoCerveza);
         }
     }
 

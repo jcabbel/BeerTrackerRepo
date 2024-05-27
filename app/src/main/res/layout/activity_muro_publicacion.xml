@@ -54,13 +54,6 @@
             android:src="@drawable/nomegusta" />
 
         <!-- Botón de "Comentarios" -->
-        <ImageView
-            android:id="@+id/comentarios"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_toEndOf="@id/megusta"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/ic_comentarios" />
 
         <!-- Contenedor de TextViews -->
 
@@ -77,7 +70,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="78 Me gusta"
             android:textColor="#F44336"
             android:textStyle="bold" />
 
@@ -87,16 +79,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Descripción de la experiencia con la cerveza X"
             android:textStyle="bold" />
 
-        <!-- Comentarios -->
         <TextView
-            android:id="@+id/ver_comentarios"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ver todos los comentarios"
-            android:textColor="#33141414" />
+            android:id="@+id/textoCerveza"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Comentarios -->
 
     </LinearLayout>
 
