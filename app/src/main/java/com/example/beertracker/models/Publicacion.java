@@ -10,13 +10,18 @@ public class Publicacion {
     private String imagenPublicacion;
     private long likes;
     private String comentarios;
+    private String cerveza;  // Nuevo campo añadido a la feed
+    private String sabor;  // Nuevo campo añadido a la feed
+    private String lugar;  // Nuevo campo añadido a la feed
+    private int valoracion;  // Nuevo campo añadido a la feed
+    private String observaciones;  // Nuevo campo añadido a la feed
     private Timestamp timestamp;
 
     public Publicacion() {
 
     }
 
-    public Publicacion(String usuario, String experiencia, String descripcion, String imagenPerfil, String imagenPublicacion, long likes, String comentarios, Timestamp timestamp) {
+    public Publicacion(String usuario, String experiencia, String descripcion, String imagenPerfil, String imagenPublicacion, long likes, String comentarios, String cerveza, String sabor, String lugar, int valoracion, String observaciones, Timestamp timestamp) {
         this.usuario = usuario;
         this.experiencia = experiencia;
         this.descripcion = descripcion;
@@ -24,6 +29,11 @@ public class Publicacion {
         this.imagenPublicacion = imagenPublicacion;
         this.likes = likes;
         this.comentarios = comentarios;
+        this.cerveza = cerveza;
+        this.sabor = sabor;
+        this.lugar = lugar;
+        this.valoracion = valoracion;
+        this.observaciones = observaciones;
         this.timestamp = timestamp;
     }
 
@@ -81,6 +91,46 @@ public class Publicacion {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    //getters y setters de los nuevos campos añadidos a la feed ------------------------------------NUEVOS Get+Set PARAMETROS NUEVOS incluídos en PUBLICACIONFEED
+
+    public String getCerveza() {
+        return cerveza;
+    }
+    public void setCerveza(String cerveza) {
+        this.cerveza = cerveza;
+    }
+    public String getSabor() {
+        return sabor;
+    }
+
+    public void setSabor(String sabor) {
+        this.sabor = sabor;
+    }
+
+    public String getLugar() {
+        return lugar;
+    }
+
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
+    }
+
+    public int getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(int valoracion) {
+        this.valoracion = valoracion;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public Timestamp getTimestamp() {

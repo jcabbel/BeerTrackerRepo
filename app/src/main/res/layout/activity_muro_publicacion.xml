@@ -35,11 +35,6 @@
     </RelativeLayout>
 
     <!-- Publicación -->
-    <!-- Ratio de altura a anchura en la linea de H,1:1.6-->
-    <!-- En el código anterior establezco un tamaño foto fijo para las publicaciones-->
-    <!-- 60% del padre. esto es lo que indica el ultimo "app...percent del constraint" -->
-
-
     <!-- Contenedor de información de la publicación (Me gusta, + info adicional) -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -79,12 +74,12 @@
         <!-- Contenedor de TextViews -->
 
     </RelativeLayout>
-
+<!-- ERIC: Dentro del Linear Layout ahora están los valores nº megusta -->
+<!-- ERIC: y los nuevos parámetros que incluye el layout publicación-->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <!-- Texto "Me gusta" -->
         <TextView
             android:id="@+id/textoMegusta"
@@ -93,21 +88,35 @@
             android:layout_marginStart="8dp"
             android:textColor="#F44336"
             android:textStyle="bold" />
-
-        <!-- Descripción -->
-        <TextView
-            android:id="@+id/descripcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textStyle="bold" />
-
         <TextView
             android:id="@+id/textoCerveza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cerveza:" />
+        <TextView
+            android:id="@+id/textoSabor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sabor:" />
 
-        <!-- Comentarios -->
+        <TextView
+            android:id="@+id/textoLugar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lugar:" />
+
+        <TextView
+            android:id="@+id/textoValoracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Valoración:" />
+
+        <TextView
+            android:id="@+id/textoObservaciones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Observaciones:" />
+
 
     </LinearLayout>
 

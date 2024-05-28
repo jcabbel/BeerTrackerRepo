@@ -49,40 +49,41 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     @Override
     public void onBindViewHolder(PublicacionViewHolder holder, int position) {
         Publicacion publicacion = publicaciones.get(position);
-        holder.usuario.setText(publicacion.getUsuario());
-        holder.descripcion.setText(publicacion.getDescripcion());
-        String experienciaId = publicacion.getExperiencia();
 
+        holder.usuario.setText(publicacion.getUsuario());
+        holder.descripcion.setText(publicacion.getDescripcion()); //Este campo ya no está en el elemento publicación, creo que era lo que ponía "TODO"
+        // ERIC: Aquí he añadido holders de los elementos que he incluído en las publicaciones. No se si hace falta algo más para enlazarlo con firbase.
+        holder.textoCerveza.setText("Cerveza: " + publicacion.getCerveza());
+        holder.textoSabor.setText("Sabor: " + publicacion.getSabor());
+        holder.textoLugar.setText("Lugar: " + publicacion.getLugar());
+        holder.textoValoracion.setText("Valoración: " + publicacion.getValoracion());
+        holder.textoObservaciones.setText("Observaciones: " + publicacion.getObservaciones());
+
+        String experienciaId = publicacion.getExperiencia();
         FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
-        String usuarioId = usuarioFirebase.getEmail();
+        String usuarioId = usuarioFirebase != null ? usuarioFirebase.getEmail() : null;
 
         listenToLikesChanges(publicacion.getExperiencia(), holder.textoMegusta);
         checkUserLike(experienciaId, usuarioId, holder.megusta);
 
-        holder.megusta.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-
+        holder.megusta.setOnClickListener(v -> {
+            if (usuarioId != null) {
                 DocumentReference publicacionRef = db.collection("experiences").document(experienciaId)
                         .collection("likedBy").document(usuarioId);
-                publicacionRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                fbLikes.quitarLike(usuarioId, experienciaId);
-                                holder.megusta.setImageResource(R.drawable.nomegusta);
-                            } else {
-                                fbLikes.darLike(usuarioId, experienciaId);
-                                holder.megusta.setImageResource(R.drawable.megusta);
-                            }
+                publicacionRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            fbLikes.quitarLike(usuarioId, experienciaId);
+                            holder.megusta.setImageResource(R.drawable.nomegusta);
                         } else {
-                            Log.e(TAG, "Error al verificar el like: ", task.getException());
+                            fbLikes.darLike(usuarioId, experienciaId);
+                            holder.megusta.setImageResource(R.drawable.megusta);
                         }
+                    } else {
+                        Log.e(TAG, "Error al verificar el like: ", task.getException());
                     }
                 });
-
             }
         });
 
@@ -97,23 +98,24 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 .into(holder.imagenPublicacion);
 
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
-        holder.textoCerveza.setText("TODO");
     }
 
     private void checkUserLike(String experienciaId, String usuarioId, ImageView megusta) {
-        DocumentReference publicacionRef = db.collection("experiences").document(experienciaId)
-                .collection("likedBy").document(usuarioId);
-        publicacionRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                if (task.getResult().exists()) {
-                    megusta.setImageResource(R.drawable.megusta);
+        if (usuarioId != null) {
+            DocumentReference publicacionRef = db.collection("experiences").document(experienciaId)
+                    .collection("likedBy").document(usuarioId);
+            publicacionRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult().exists()) {
+                        megusta.setImageResource(R.drawable.megusta);
+                    } else {
+                        megusta.setImageResource(R.drawable.nomegusta);
+                    }
                 } else {
-                    megusta.setImageResource(R.drawable.nomegusta);
+                    Log.e(TAG, "Error al verificar el like: ", task.getException());
                 }
-            } else {
-                Log.e(TAG, "Error al verificar el like: ", task.getException());
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -124,7 +126,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imagenPerfil, imagenPublicacion, megusta;
-        TextView usuario, descripcion, textoMegusta, textoCerveza;
+        TextView usuario, descripcion, textoMegusta, textoCerveza, textoSabor, textoLugar, textoValoracion, textoObservaciones;
 
         public PublicacionViewHolder(View itemView) {
             super(itemView);
@@ -132,9 +134,13 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
             imagenPublicacion = itemView.findViewById(R.id.publicacion);
             megusta = itemView.findViewById(R.id.megusta);
             usuario = itemView.findViewById(R.id.usuario);
-            descripcion = itemView.findViewById(R.id.descripcion);
+            //descripcion = itemView.findViewById(R.id.descripcion); esto creo que ya no hace falta, este campo ya no existe en el layout de publicaciones
             textoMegusta = itemView.findViewById(R.id.textoMegusta);
             textoCerveza = itemView.findViewById(R.id.textoCerveza);
+            textoSabor = itemView.findViewById(R.id.textoSabor);
+            textoLugar = itemView.findViewById(R.id.textoLugar);
+            textoValoracion = itemView.findViewById(R.id.textoValoracion);
+            textoObservaciones = itemView.findViewById(R.id.textoObservaciones);
         }
     }
 

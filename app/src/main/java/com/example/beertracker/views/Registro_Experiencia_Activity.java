@@ -125,9 +125,9 @@
             startActivity(intent);
             finish(); // Finalizar esta actividad para evitar volver atrás con el botón de retroceso
         }
-
+//ERIC: He añadido los campos nuevos que ha de agregar la experiencia en la db para mostrar más tarde en la feed || cerveza, sabor, lugar, valoracion y observaciones
         private void agregarExperiencia(Usuario usuario, Cerveza cerveza, String sabor, String lugar, int valoracion, String observaciones, Uri fotoUri) {
-
+//ERIC: Veo que cerveza se pasa sube a firebase como cerveza ID, esto no lo he tenido en cuenta al programar... Me acabo de dar cuenta (23:10h después de hablar por la noche))
             String usuarioMail = usuario.getEmail();
             String cervezaId = cerveza.getId();
             String valoracionString = Integer.toString(valoracion);
