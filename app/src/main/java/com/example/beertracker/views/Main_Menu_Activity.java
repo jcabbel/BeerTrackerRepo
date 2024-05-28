@@ -39,9 +39,6 @@ public class Main_Menu_Activity extends AppCompatActivity {
         publicacionAdapter = new PublicacionAdapter(publicaciones, Main_Menu_Activity.this);
         recyclerView.setAdapter(publicacionAdapter);
 
-
-        Log.d("DemoPublicaciones", "Llamando a getDemoPublicaciones()");
-
         // Obtener lista de publicaciones
         FirebaseHelper.getPublicaciones(new FirebaseHelper.publicacionesCallback() {
             @Override

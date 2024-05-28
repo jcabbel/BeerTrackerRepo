@@ -17,22 +17,11 @@
         android:theme="@style/Theme.BeerTracker"
         tools:targetApi="31">
         <activity
-            android:name=".views.Listar_Productos_Activity"
-            android:exported="false" />
-        <activity
             android:name=".views.Registro_Experiencia_Activity"
             android:exported="false" />
         <activity
             android:name=".views.Registro_Producto_Activity"
             android:exported="false" />
-        <activity
-            android:name=".views.Buscar_Experiencia_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".views.Buscar_Producto_Activity"
-            android:exported="false"
-            android:label="@string/title_activity_buscar_producto"
-            android:theme="@style/Theme.BeerTracker" />
         <activity
             android:name=".views.Registrar_Activity"
             android:exported="false" />
