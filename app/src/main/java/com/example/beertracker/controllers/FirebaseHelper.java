@@ -102,6 +102,66 @@ public class FirebaseHelper {
                     });
         }
 
+    public static void getPublicacionesByUser(String email, publicacionesCallback callback) {
+        List<Publicacion> publicaciones = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("experiences")
+                .whereEqualTo("usuario", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("DemoPublicaciones", "Acceso a la coleccón EXPERIENCES por usuario");
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String mail = document.getString("usuario");
+                                DocumentReference userRef = db.collection("users").document(mail);
+                                Log.d("DemoPublicaciones", "Usuario seleccionado");
+
+                                userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            String nombre = documentSnapshot.getString("nombre") + " " + documentSnapshot.getString("apellidos");
+                                            String experiencia = document.getId();
+                                            String descripcion = document.getString("observaciones");
+                                            String imagenPerfil = documentSnapshot.getString("fotoUri");
+                                            String imagenPublicacion = document.getString("fotoUrl");
+                                            Timestamp timestamp = document.getTimestamp("timestamp");
+                                            long likes = document.getLong("likes");
+                                            String comentarios = "Comentarios";
+
+                                            publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, comentarios, timestamp));
+                                            Log.d("DemoPublicaciones", "Número de publicaciones: " + publicaciones.size());
+
+                                            if (publicaciones.size() == task.getResult().size()) {
+                                                Collections.sort(publicaciones, new Comparator<Publicacion>() {
+                                                    @Override
+                                                    public int compare(Publicacion p1, Publicacion p2) {
+                                                        return p2.getTimestamp().compareTo(p1.getTimestamp());
+                                                    }
+                                                });
+                                                callback.onCallback(publicaciones);
+                                            }
+                                        }
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        callback.onFailure(e);
+                                    }
+                                });
+                            }
+                        } else {
+                            callback.onFailure(task.getException());
+                        }
+                    }
+                });
+    }
+
+
     public static void getUsuarioDB(String email, final usuariosCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userRef = db.collection("users").document(email);
