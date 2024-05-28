@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <!-- Contenedor de la imagen de perfil y nombre de usuario -->
@@ -33,14 +35,34 @@
     </RelativeLayout>
 
     <!-- Publicación -->
-    <ImageView
-        android:id="@+id/publicacion"
+    <!-- Ratio de altura a anchura en la linea de H,1:1.6-->
+    <!-- En el código anterior establezco un tamaño foto fijo para las publicaciones-->
+    <!-- 60% del padre. esto es lo que indica el ultimo "app...percent del constraint" -->
+
+
+    <!-- Contenedor de información de la publicación (Me gusta, + info adicional) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+        tools:ignore="ExtraText">
 
-    <!-- Contenedor de botones (Me gusta, comentarios) -->
+        <ImageView
+            android:id="@+id/publicacion"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1.65"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="wrap"
+            app:layout_constraintHeight_max="0dp"
+            app:layout_constraintHeight_percent="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="spread" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +75,6 @@
             android:layout_height="30dp"
             android:src="@drawable/nomegusta" />
 
-        <!-- Botón de "Comentarios" -->
 
         <!-- Contenedor de TextViews -->
 
