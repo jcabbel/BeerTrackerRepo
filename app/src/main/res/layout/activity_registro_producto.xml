@@ -34,14 +34,6 @@
         android:hint="Por ejemplo, Mahou"
         android:layout_marginBottom="16dp" />
 
-    <!-- Botón para cargar la foto -->
-    <Button
-        android:id="@+id/btnCargarFoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cargar Foto"
-        android:layout_marginBottom="16dp"/>
-
     <Button
         android:id="@+id/btnGuardar"
         android:layout_width="match_parent"
