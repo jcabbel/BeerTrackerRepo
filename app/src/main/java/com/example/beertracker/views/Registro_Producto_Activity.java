@@ -29,7 +29,6 @@ public class Registro_Producto_Activity extends AppCompatActivity {
     private EditText etMarca;
     private Button btnGuardar;
     private Button btnCancelar;
-    private Button btnCargarFoto;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -39,7 +38,6 @@ public class Registro_Producto_Activity extends AppCompatActivity {
 
         btnGuardar = findViewById(R.id.btnGuardar);
         btnCancelar = findViewById(R.id.btnCancelar);
-        btnCargarFoto = findViewById(R.id.btnCargarFoto);
 
         etNombre = findViewById(R.id.editTextNombre);
         etMarca = findViewById(R.id.editTextMarca);
@@ -68,14 +66,6 @@ public class Registro_Producto_Activity extends AppCompatActivity {
                 Intent intent = new Intent(Registro_Producto_Activity.this, Registrar_Activity.class);
                 startActivity(intent);
                 finish(); // Opcional, para cerrar esta actividad después de iniciar la siguiente
-            }
-        });
-
-        btnCargarFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Mostrar un mensaje Toast indicando que se requiere actualización
-                Toast.makeText(Registro_Producto_Activity.this, "Función disponible en futuras versiones", Toast.LENGTH_SHORT).show();
             }
         });
     }

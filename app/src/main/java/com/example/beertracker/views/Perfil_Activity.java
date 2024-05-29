@@ -7,11 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.beertracker.R;
@@ -38,6 +41,10 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
     private TextView textViewEmail;
     private TextView textViewNumeroPublicaciones;
     private TextView textViewNumeroLikes;
+    private ImageButton imageButtonCameraIcon;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
+
 
     String fotoUri;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -52,11 +59,12 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
         textViewEmail = findViewById(R.id.textViewEmail);
         textViewNumeroPublicaciones = findViewById(R.id.textViewNumeroPublicaciones);
         textViewNumeroLikes = findViewById(R.id.textViewNumeroLikes);
+        imageButtonCameraIcon = findViewById(R.id.imageButtonCameraIcon);
 
         FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
-            String usuarioId = usuarioFirebase.getEmail();
-            FirebaseHelper firebaseHelper = new FirebaseHelper();
-            FirebaseHelper.getUsuarioDB(usuarioId, this);
+        String usuarioId = usuarioFirebase.getEmail();
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        FirebaseHelper.getUsuarioDB(usuarioId, this);
 
         FirebaseHelper.getPublicacionesByUser(usuarioId, new FirebaseHelper.publicacionesCallback() {
             @Override
@@ -78,7 +86,15 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
                 finish(); // Opcional, para cerrar esta actividad después de iniciar la siguiente
             }
         });
+
+        imageButtonCameraIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seleccionarFoto();
+            }
+        });
     }
+
 
     private void actualizarTextViews(List<Publicacion> publicaciones) {
         int numeroPublicaciones = publicaciones.size();
@@ -104,11 +120,58 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
     } else {
         Log.d(TAG, "Usuario no encontrado");
     }
-
     }
 
     @Override
     public void onFailure(Exception e) {
         Log.e(TAG, "Error al obtener el usuario", e);
+    }
+
+    private void seleccionarFoto() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Selecciona una foto"), PICK_IMAGE_REQUEST);
+    }
+    private void subirImagenPerfil(Uri imageUri) {
+        if (imageUri != null) {
+            FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
+            String usuarioId = usuarioFirebase.getEmail();
+
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("images/profile_images/" + usuarioId);
+            storageReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            // Actualiza la URI de la imagen de perfil en Firestore
+                            db.collection("users").document(usuarioId).update("fotoUri", uri.toString())
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(Perfil_Activity.this, "Imagen de perfil actualizada exitosamente", Toast.LENGTH_SHORT).show();
+
+                                        // Actualiza la vista con la nueva imagen seleccionada
+                                        Glide.with(Perfil_Activity.this)
+                                                .load(uri)
+                                                .placeholder(R.drawable.beer_bw)
+                                                .into(imageView);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(Perfil_Activity.this, "Error al actualizar la imagen de perfil", Toast.LENGTH_SHORT).show();
+                                    });
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(Perfil_Activity.this, "Error al subir la imagen", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(Perfil_Activity.this, "No se ha seleccionado ninguna imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            subirImagenPerfil(imageUri);
+        }
     }
 }
