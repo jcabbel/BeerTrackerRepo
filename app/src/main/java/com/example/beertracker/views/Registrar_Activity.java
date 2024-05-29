@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.beertracker.R;
@@ -13,7 +15,7 @@ public class Registrar_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrar);
+        setContentView(R.layout.activity_registrar_v2);
 
         // Configurar el botón de volver
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
@@ -28,8 +30,8 @@ public class Registrar_Activity extends AppCompatActivity {
         });
 
         // Obtener referencias de los botones
-        Button btnProducto = findViewById(R.id.btnProducto);
-        Button btnExperiencia = findViewById(R.id.btnExperiencia);
+        ImageButton btnProducto = findViewById(R.id.btnProducto);
+        ImageButton btnExperiencia = findViewById(R.id.btnExperiencia);
 
         // Configurar listener para el botón Producto
         btnProducto.setOnClickListener(new View.OnClickListener() {
