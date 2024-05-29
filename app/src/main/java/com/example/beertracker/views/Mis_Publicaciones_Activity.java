@@ -75,16 +75,17 @@ public class Mis_Publicaciones_Activity extends AppCompatActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Cuando se presiona el botón "Buscar", iniciar la actividad de búsqueda
-                Intent intent = new Intent(Mis_Publicaciones_Activity.this, Mis_Publicaciones_Activity.class);
-                startActivity(intent);
+                // Recargar la actividad actual
+                recreate();
             }
         });
 
         btnWall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recreate();
+                // Iniciar la actividad del menú principal
+                Intent intent = new Intent(Mis_Publicaciones_Activity.this, Main_Menu_Activity.class);
+                startActivity(intent);
             }
         });
 

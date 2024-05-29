@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/amarillo_suave">
-
+    <!--ESTE LAYOUT FUE EL PRIMER DISEÑO DE PERFIL. NO ESTÁ EN USO-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="53dp"
