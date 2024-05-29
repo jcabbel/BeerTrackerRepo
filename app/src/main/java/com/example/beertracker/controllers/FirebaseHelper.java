@@ -1,5 +1,7 @@
 package com.example.beertracker.controllers;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -188,4 +190,20 @@ public class FirebaseHelper {
         });
     }
 
+    public void borrarDocumento(Context contexto, String coleccion, String documento){
+        db.collection(coleccion).document(documento)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(contexto, "Documento borrado correctamente", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(contexto, "Error al borrar", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }

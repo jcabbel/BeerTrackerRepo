@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.beertracker.R;
+import com.example.beertracker.controllers.FirebaseHelper;
 import com.example.beertracker.controllers.FirebaseLikes;
 import com.example.beertracker.models.Experiencia;
 import com.example.beertracker.models.Publicacion;
@@ -27,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -35,6 +39,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     private List<Publicacion> publicaciones;
     private Context context;
     FirebaseLikes fbLikes = new FirebaseLikes();
+    FirebaseHelper fbHelper = new FirebaseHelper();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public PublicacionAdapter(List<Publicacion> publicaciones, Context context) {
@@ -53,9 +58,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
         Publicacion publicacion = publicaciones.get(position);
         String experienciaId = publicacion.getExperiencia();
 
-
-
-
         DocumentReference docRef = db.collection("experiences").document(experienciaId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -63,7 +65,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-
                             DocumentReference beerRef = db.collection("beers").document(document.getString("cerveza"));
                             beerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -131,6 +132,31 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 .into(holder.imagenPublicacion);
 
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
+
+        holder.borrar.setOnClickListener(v -> {
+            DocumentReference expRef = db.collection("experiences").document(experienciaId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            if(document.getString("usuario").equals(usuarioId)){
+                                fbHelper.borrarDocumento(v.getContext(), "experiences", experienciaId);
+                                Toast.makeText(context, "Borrado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Solo puedes borrar tus publicaciones", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d(TAG, "Documento experiencia no encontrado");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+
+        });
     }
 
     private void checkUserLike(String experienciaId, String usuarioId, ImageView megusta) {
@@ -158,7 +184,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
 
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imagenPerfil, imagenPublicacion, megusta;
+        ImageView imagenPerfil, imagenPublicacion, megusta, borrar;
         TextView usuario, textoMegusta, textoCerveza, textoSabor, textoLugar, textoValoracion, textoObservaciones;
 
         public PublicacionViewHolder(View itemView) {
@@ -166,6 +192,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
             imagenPerfil = itemView.findViewById(R.id.imagen_perfil);
             imagenPublicacion = itemView.findViewById(R.id.publicacion);
             megusta = itemView.findViewById(R.id.megusta);
+            borrar = itemView.findViewById(R.id.borrar);
             usuario = itemView.findViewById(R.id.usuario);
             textoMegusta = itemView.findViewById(R.id.textoMegusta);
             textoCerveza = itemView.findViewById(R.id.textoCerveza);
