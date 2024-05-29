@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -63,7 +65,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-
                             DocumentReference beerRef = db.collection("beers").document(document.getString("cerveza"));
                             beerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -131,12 +132,29 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 .into(holder.imagenPublicacion);
 
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
+
         holder.borrar.setOnClickListener(v -> {
-            if(usuarioId.equals(publicacion.getUsuario())) {
-                fbHelper.borrarDocumento(v.getContext(), "experiences", experienciaId);
-            } else {
-                Toast.makeText(context, "Sólo puedes borrar tus propias publicaciones", Toast.LENGTH_SHORT).show();
-            }
+            DocumentReference expRef = db.collection("experiences").document(experienciaId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            if(document.getString("usuario").equals(usuarioId)){
+                                fbHelper.borrarDocumento(v.getContext(), "experiences", experienciaId);
+                                Toast.makeText(context, "Borrado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "Solo puedes borrar tus publicaciones", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.d(TAG, "Documento experiencia no encontrado");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
 
         });
     }
