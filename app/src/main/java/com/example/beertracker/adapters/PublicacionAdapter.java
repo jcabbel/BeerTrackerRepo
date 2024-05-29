@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.beertracker.R;
+import com.example.beertracker.controllers.FirebaseHelper;
 import com.example.beertracker.controllers.FirebaseLikes;
 import com.example.beertracker.models.Experiencia;
 import com.example.beertracker.models.Publicacion;
@@ -35,6 +37,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     private List<Publicacion> publicaciones;
     private Context context;
     FirebaseLikes fbLikes = new FirebaseLikes();
+    FirebaseHelper fbHelper = new FirebaseHelper();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public PublicacionAdapter(List<Publicacion> publicaciones, Context context) {
@@ -52,9 +55,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     public void onBindViewHolder(PublicacionViewHolder holder, int position) {
         Publicacion publicacion = publicaciones.get(position);
         String experienciaId = publicacion.getExperiencia();
-
-
-
 
         DocumentReference docRef = db.collection("experiences").document(experienciaId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -131,6 +131,14 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
                 .into(holder.imagenPublicacion);
 
         holder.textoMegusta.setText(publicacion.getLikes() + " Me gusta");
+        holder.borrar.setOnClickListener(v -> {
+            if(usuarioId.equals(publicacion.getUsuario())) {
+                fbHelper.borrarDocumento(v.getContext(), "experiences", experienciaId);
+            } else {
+                Toast.makeText(context, "Sólo puedes borrar tus propias publicaciones", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     private void checkUserLike(String experienciaId, String usuarioId, ImageView megusta) {
@@ -158,7 +166,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
 
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imagenPerfil, imagenPublicacion, megusta;
+        ImageView imagenPerfil, imagenPublicacion, megusta, borrar;
         TextView usuario, textoMegusta, textoCerveza, textoSabor, textoLugar, textoValoracion, textoObservaciones;
 
         public PublicacionViewHolder(View itemView) {
@@ -166,6 +174,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
             imagenPerfil = itemView.findViewById(R.id.imagen_perfil);
             imagenPublicacion = itemView.findViewById(R.id.publicacion);
             megusta = itemView.findViewById(R.id.megusta);
+            borrar = itemView.findViewById(R.id.borrar);
             usuario = itemView.findViewById(R.id.usuario);
             textoMegusta = itemView.findViewById(R.id.textoMegusta);
             textoCerveza = itemView.findViewById(R.id.textoCerveza);
