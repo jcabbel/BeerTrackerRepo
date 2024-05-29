@@ -88,11 +88,13 @@
             android:layout_marginStart="8dp"
             android:textColor="#F44336"
             android:textStyle="bold" />
+
         <TextView
             android:id="@+id/textoCerveza"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cerveza:" />
+
         <TextView
             android:id="@+id/textoSabor"
             android:layout_width="wrap_content"

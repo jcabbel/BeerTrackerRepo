@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.beertracker.R;
 import com.example.beertracker.controllers.FirebaseHelper;
+import com.example.beertracker.models.Publicacion;
 import com.example.beertracker.models.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper.usuariosCallback {
@@ -34,6 +36,8 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
     private ImageView imageView;
     private TextView textViewNombre;
     private TextView textViewEmail;
+    private TextView textViewNumeroPublicaciones;
+    private TextView textViewNumeroLikes;
 
     String fotoUri;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -46,15 +50,25 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
         imageView = findViewById(R.id.imageView);
         textViewNombre = findViewById(R.id.textViewNombre);
         textViewEmail = findViewById(R.id.textViewEmail);
-
+        textViewNumeroPublicaciones = findViewById(R.id.textViewNumeroPublicaciones);
+        textViewNumeroLikes = findViewById(R.id.textViewNumeroLikes);
 
         FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
-        if (usuarioFirebase != null) {
             String usuarioId = usuarioFirebase.getEmail();
             FirebaseHelper firebaseHelper = new FirebaseHelper();
-            firebaseHelper.getUsuarioDB(usuarioId, this);
-        }
+            FirebaseHelper.getUsuarioDB(usuarioId, this);
 
+        FirebaseHelper.getPublicacionesByUser(usuarioId, new FirebaseHelper.publicacionesCallback() {
+            @Override
+            public void onCallback(List<Publicacion> publicaciones) {
+                actualizarTextViews(publicaciones);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.d(TAG, "No se puede obtener las publicaciones de este usuario: " + usuarioId);
+            }
+        });
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,23 +79,17 @@ public class Perfil_Activity extends AppCompatActivity implements FirebaseHelper
             }
         });
     }
-    private void cargarImagenPerfil(String usuarioId) {
-        db.collection("users").document(usuarioId).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String fotoUri = document.getString("fotoUri");
-                                Glide.with(Perfil_Activity.this)
-                                        .load(fotoUri)
-                                        .placeholder(R.drawable.beer_bw)
-                                        .into(imageView);
-                            }
-                        }
-                    }
-                });
+
+    private void actualizarTextViews(List<Publicacion> publicaciones) {
+        int numeroPublicaciones = publicaciones.size();
+        int numeroDeLikes = 0;
+
+        for (Publicacion publicacion : publicaciones) {
+            numeroDeLikes += publicacion.getLikes();
+        }
+
+        textViewNumeroPublicaciones.setText("Creadas: " + numeroPublicaciones);
+        textViewNumeroLikes.setText("Likes recibidos: " + numeroDeLikes);
     }
 
     @Override

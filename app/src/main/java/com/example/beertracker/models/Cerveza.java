@@ -42,4 +42,11 @@ public class Cerveza {
         this.marca = marca;
     }
 
+    @Override
+    public String toString() {
+        return "Cerveza{" +
+                "Marca='" + marca + '\'' +
+                ", Nombre='" + nombre + '\'' +
+                '}';
+    }
 }

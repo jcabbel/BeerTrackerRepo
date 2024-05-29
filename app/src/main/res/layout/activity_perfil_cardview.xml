@@ -114,18 +114,27 @@
                 android:id="@+id/textViewMisCervezas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mis Cervezas"
-                android:textSize="18sp"
+                android:text="Mis Publicaciones"
                 android:textColor="@android:color/black"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textViewDetalleMisCervezas"
+                android:id="@+id/textViewNumeroPublicaciones"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewNumeroLikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Registros: 4\nCon foto: 3\nFavoritos: 1"
-                android:textSize="16sp"
-                android:textColor="@android:color/black" />
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
         </LinearLayout>
         <!-- Aquí puedes personalizar el diseño para las cervezas -->
     </androidx.cardview.widget.CardView>

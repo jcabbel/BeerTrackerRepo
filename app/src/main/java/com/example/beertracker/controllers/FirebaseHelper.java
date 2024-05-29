@@ -69,16 +69,7 @@ public class FirebaseHelper {
                                             Timestamp timestamp = document.getTimestamp("timestamp");
                                             long likes = document.getLong("likes");
                                             String comentarios = "Comentarios";
-//ERIC: Estas son las anotaciones sobre el error que da publicaciones.add, más abajo comentado para evitar el error.
-        //He comentado publicaciones.add porque me da un error en los campos
-            // || cerveza, sabor, lugar, valoracion, observaciones,||
-        //Yo creo que el problema viene en que en algún lado, no se si en la db de firebase o dónde,
-                //se está perdiendo la el get o set de los valores parametros que dan error.
-        // He modificado el layout para que las publicaciones contengan ya todos los valores
-        // He modificado el java de publicacion, publicacionAdapter
-                                            //publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, comentarios, cerveza, sabor, lugar, valoracion, observaciones, timestamp));
-                                            Log.d("DemoPublicaciones", "Número de publicaciones: " + publicaciones.size());
-
+                                            publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, timestamp));
                                             if (publicaciones.size() == task.getResult().size()) {
                                                 Collections.sort(publicaciones, new Comparator<Publicacion>() {
                                                     @Override
@@ -131,9 +122,8 @@ public class FirebaseHelper {
                                             String imagenPublicacion = document.getString("fotoUrl");
                                             Timestamp timestamp = document.getTimestamp("timestamp");
                                             long likes = document.getLong("likes");
-                                            String comentarios = "Comentarios";
 
-                                            publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, comentarios, timestamp));
+                                            publicaciones.add(new Publicacion(nombre, experiencia, descripcion, imagenPerfil, imagenPublicacion, likes, timestamp));
                                             Log.d("DemoPublicaciones", "Número de publicaciones: " + publicaciones.size());
 
                                             if (publicaciones.size() == task.getResult().size()) {

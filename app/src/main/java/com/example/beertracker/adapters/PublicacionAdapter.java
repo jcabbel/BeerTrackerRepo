@@ -3,6 +3,7 @@ package com.example.beertracker.adapters;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.beertracker.R;
 import com.example.beertracker.controllers.FirebaseLikes;
+import com.example.beertracker.models.Experiencia;
 import com.example.beertracker.models.Publicacion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,17 +51,48 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     @Override
     public void onBindViewHolder(PublicacionViewHolder holder, int position) {
         Publicacion publicacion = publicaciones.get(position);
-
-        holder.usuario.setText(publicacion.getUsuario());
-        holder.descripcion.setText(publicacion.getDescripcion()); //Este campo ya no está en el elemento publicación, creo que era lo que ponía "TODO"
-        // ERIC: Aquí he añadido holders de los elementos que he incluído en las publicaciones. No se si hace falta algo más para enlazarlo con firbase.
-        holder.textoCerveza.setText("Cerveza: " + publicacion.getCerveza());
-        holder.textoSabor.setText("Sabor: " + publicacion.getSabor());
-        holder.textoLugar.setText("Lugar: " + publicacion.getLugar());
-        holder.textoValoracion.setText("Valoración: " + publicacion.getValoracion());
-        holder.textoObservaciones.setText("Observaciones: " + publicacion.getObservaciones());
-
         String experienciaId = publicacion.getExperiencia();
+
+
+
+
+        DocumentReference docRef = db.collection("experiences").document(experienciaId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                            DocumentReference beerRef = db.collection("beers").document(document.getString("cerveza"));
+                            beerRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()){
+                                        DocumentSnapshot docBeer = task.getResult();
+
+                                        holder.usuario.setText(publicacion.getUsuario());
+                                        holder.textoCerveza.setText(Html.fromHtml("<b>Cerveza: </b>" + docBeer.getString("marca") + " - " + docBeer.getString("nombre")));
+                                        holder.textoSabor.setText(Html.fromHtml("<b>Sabor: </b>" + document.getString("sabor")));
+                                        holder.textoLugar.setText(Html.fromHtml("<b>Lugar: </b>" + document.getString("lugar")));
+                                        holder.textoValoracion.setText(Html.fromHtml("<b>Valoración: </b>" + document.getString("valoracion")));
+                                        holder.textoObservaciones.setText(Html.fromHtml("<b>Observaciones: </b>" + document.getString("observaciones")));
+
+                                    } else {
+                                        Log.d(TAG, "Documento cerveza no encontrado");
+                                    }
+                                }
+                            });
+
+                    } else {
+                        Log.d(TAG, "Documento experiencia no encontrado");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
         FirebaseUser usuarioFirebase = FirebaseAuth.getInstance().getCurrentUser();
         String usuarioId = usuarioFirebase != null ? usuarioFirebase.getEmail() : null;
 
@@ -126,7 +159,7 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     public class PublicacionViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imagenPerfil, imagenPublicacion, megusta;
-        TextView usuario, descripcion, textoMegusta, textoCerveza, textoSabor, textoLugar, textoValoracion, textoObservaciones;
+        TextView usuario, textoMegusta, textoCerveza, textoSabor, textoLugar, textoValoracion, textoObservaciones;
 
         public PublicacionViewHolder(View itemView) {
             super(itemView);
@@ -134,7 +167,6 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
             imagenPublicacion = itemView.findViewById(R.id.publicacion);
             megusta = itemView.findViewById(R.id.megusta);
             usuario = itemView.findViewById(R.id.usuario);
-            //descripcion = itemView.findViewById(R.id.descripcion); esto creo que ya no hace falta, este campo ya no existe en el layout de publicaciones
             textoMegusta = itemView.findViewById(R.id.textoMegusta);
             textoCerveza = itemView.findViewById(R.id.textoCerveza);
             textoSabor = itemView.findViewById(R.id.textoSabor);
