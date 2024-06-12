@@ -46,7 +46,6 @@ public class Mis_Publicaciones_Activity extends AppCompatActivity {
         FirebaseHelper.getPublicacionesByUser(usuarioId, new FirebaseHelper.publicacionesCallback() {
             @Override
             public void onCallback(List<Publicacion> publicacionesRecibidas) {
-                // Guardar la información recibida y actualizar el adaptador
                 publicaciones.clear();
                 publicaciones.addAll(publicacionesRecibidas);
                 publicacionAdapter.notifyDataSetChanged();
